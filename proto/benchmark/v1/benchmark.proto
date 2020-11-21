@@ -1,0 +1,22 @@
+syntax = "proto3";
+package benchmark.v1;
+option go_package = "github.com/franchb/cel-go-benchmarks/proto/benchmark/v1;benchmarkv1";
+
+import "google/protobuf/timestamp.proto";
+
+message Message {
+  int64 id = 1;
+  string name = 2;
+  string url = 3;
+  string fqdn = 4;
+  bytes ip = 5;
+  bytes mac = 7;
+  string meta1 = 8;
+  string meta2 = 9;
+  string meta3 = 10;
+  string meta4 = 11;
+  string meta5 = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+  repeated string tags = 15;
+}
