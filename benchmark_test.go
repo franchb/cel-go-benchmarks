@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/antonmedv/expr"
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker/decls"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -17,8 +18,8 @@ import (
 )
 
 const (
-	defaultSamplesCount = 100
-	testdataFilename    = "testdata/testdata_100.ndjson"
+	testdataFilename = "testdata/testdata_100.ndjson"
+	expression       = `Message.Id > 710`
 )
 
 var iter *iterator.Iterator
@@ -53,7 +54,7 @@ func BenchmarkCelGo(b *testing.B) {
 	}
 
 	// Parse and check the expression.
-	p, issues := e.Parse(`Message.Id > 710`)
+	p, issues := e.Parse(expression)
 	if issues != nil && issues.Err() != nil {
 		b.Fatal(issues.Err())
 	}
@@ -80,6 +81,33 @@ func BenchmarkCelGo(b *testing.B) {
 		})
 	}
 
+}
+
+type Request struct {
+	Message *benchmarkv1.Message
+}
+
+func BenchmarkExprSimple(b *testing.B) {
+	program, err := expr.Compile(expression, expr.Env(&Request{}))
+
+	if err != nil {
+		panic(err)
+	}
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 1; i <= 4; i *= 2 {
+		b.Run(strconv.Itoa(i), func(b *testing.B) {
+			b.SetParallelism(i)
+			b.RunParallel(func(pb *testing.PB) {
+				for pb.Next() {
+					_, err := expr.Run(program, &Request{Message: iter.Next()})
+					if err != nil {
+						b.Fatalf("runtime error: %s\n", err)
+					}
+				}
+			})
+		})
+	}
 }
 
 func loadCache() ([]*benchmarkv1.Message, error) {

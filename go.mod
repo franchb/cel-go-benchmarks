@@ -3,6 +3,7 @@ module github.com/franchb/cel-go-benchmarks
 go 1.15
 
 require (
+	github.com/antonmedv/expr v1.8.9
 	github.com/bufbuild/buf v0.31.1
 	github.com/bxcodec/faker/v3 v3.5.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
