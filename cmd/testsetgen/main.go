@@ -77,12 +77,13 @@ func parseFlags() (*options, error) {
 			count: *count,
 		}, nil
 	} else {
-		_, err := os.Stat(*path)
+		dir, _ := filepath.Split(*path)
+		_, err := os.Stat(dir)
 		if err != nil {
-			return nil, fmt.Errorf("could not find target path: %w", err)
+			return nil, fmt.Errorf("could not find target path %s: %w", dir, err)
 		}
 		return &options{
-			path:  filepath.Join(*path, testdataFilename),
+			path:  *path,
 			count: *count,
 		}, nil
 	}

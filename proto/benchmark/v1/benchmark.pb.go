@@ -7,11 +7,12 @@
 package benchmarkv1
 
 import (
+	reflect "reflect"
+	sync "sync"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (
@@ -222,11 +223,14 @@ func file_benchmark_v1_benchmark_proto_rawDescGZIP() []byte {
 	return file_benchmark_v1_benchmark_proto_rawDescData
 }
 
-var file_benchmark_v1_benchmark_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_benchmark_v1_benchmark_proto_goTypes = []interface{}{
-	(*Message)(nil),               // 0: benchmark.v1.Message
-	(*timestamppb.Timestamp)(nil), // 1: google.protobuf.Timestamp
-}
+var (
+	file_benchmark_v1_benchmark_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+	file_benchmark_v1_benchmark_proto_goTypes  = []interface{}{
+		(*Message)(nil),               // 0: benchmark.v1.Message
+		(*timestamppb.Timestamp)(nil), // 1: google.protobuf.Timestamp
+	}
+)
+
 var file_benchmark_v1_benchmark_proto_depIdxs = []int32{
 	1, // 0: benchmark.v1.Message.created_at:type_name -> google.protobuf.Timestamp
 	1, // 1: benchmark.v1.Message.updated_at:type_name -> google.protobuf.Timestamp

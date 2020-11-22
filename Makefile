@@ -28,3 +28,11 @@ proto-gen: $(addprefix $(PROTO_PATH)/, $(GO_PROTOS))
 		--plugin=protoc-gen-go=$(TOOLS_PATH)/protoc-gen-go \
 		--plugin=protoc-gen-buf-check-lint=$(TOOLS_PATH)/protoc-gen-buf-check-lint \
 		$(GO_PROTOS)
+
+.PHONY: proto-gen
+benchmark:
+	BENCHMARK_DATA=$(SRC) go test -run=Bench -bench=. -benchmem
+
+.PHONY: proto-gen
+generate-samples:
+	go run ./cmd/testsetgen -target ./testdata/testdata_$(COUNT).ndjson -count $(COUNT)
